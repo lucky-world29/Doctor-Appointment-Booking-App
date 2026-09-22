@@ -1,15 +1,17 @@
+
 import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-
 import { supabase } from "../services/supabaseClient";
+
+// =========================================
+// PROTECTED ROUTE
+// =========================================
 
 function ProtectedRoute({ children }) {
     const location = useLocation();
 
     const [session, setSession] = useState(null);
-
     const [loading, setLoading] = useState(true);
-
 
     // =========================================
     // CHECK SUPABASE SESSION
@@ -19,50 +21,47 @@ function ProtectedRoute({ children }) {
         let mounted = true;
 
         const getSession = async () => {
-            const {
-                data,
-                error,
-            } = await supabase.auth.getSession();
+            const { data, error } =
+                await supabase.auth.getSession();
 
             if (error) {
                 console.error(
-                    "Error getting session:",
+                    "Error getting Supabase session:",
                     error
                 );
             }
 
             if (mounted) {
-                setSession(data?.session || null);
+                setSession(data?.session ?? null);
                 setLoading(false);
             }
         };
 
         getSession();
 
-
         // =========================================
-        // LISTEN FOR LOGIN / LOGOUT CHANGES
+        // LISTEN FOR AUTH CHANGES
         // =========================================
 
         const {
             data: authListener,
         } = supabase.auth.onAuthStateChange(
-            (_event, session) => {
-
+            (_event, currentSession) => {
                 if (mounted) {
-                    setSession(session);
+                    setSession(currentSession);
                 }
             }
         );
 
+        // =========================================
+        // CLEANUP
+        // =========================================
 
         return () => {
             mounted = false;
-
             authListener?.subscription?.unsubscribe();
         };
     }, []);
-
 
     // =========================================
     // LOADING
@@ -84,26 +83,27 @@ function ProtectedRoute({ children }) {
         );
     }
 
-
     // =========================================
     // NOT LOGGED IN
     // =========================================
 
     if (!session) {
+        const currentPath =
+            location.pathname + location.search;
+
         return (
             <Navigate
                 to="/login"
                 replace
                 state={{
-                    from: location.pathname,
+                    from: currentPath,
                 }}
             />
         );
     }
 
-
     // =========================================
-    // LOGGED IN
+    // AUTHENTICATED
     // =========================================
 
     return children;
