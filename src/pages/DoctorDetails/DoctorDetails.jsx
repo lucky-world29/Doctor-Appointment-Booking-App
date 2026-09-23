@@ -14,32 +14,32 @@ function DoctorDetails() {
     const [error, setError] = useState("");
 
     useEffect(() => {
+        const fetchDoctor = async () => {
+            try {
+                setLoading(true);
+                setError("");
+
+                const { data, error } = await supabase
+                    .from("doctors")
+                    .select("*")
+                    .eq("id", id)
+                    .single();
+
+                if (error) {
+                    throw error;
+                }
+
+                setDoctor(data);
+            } catch (error) {
+                console.error("Error fetching doctor:", error);
+                setError("Unable to load doctor details.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
         fetchDoctor();
     }, [id]);
-
-    const fetchDoctor = async () => {
-        try {
-            setLoading(true);
-            setError("");
-
-            const { data, error } = await supabase
-                .from("doctors")
-                .select("*")
-                .eq("id", id)
-                .single();
-
-            if (error) {
-                throw error;
-            }
-
-            setDoctor(data);
-        } catch (error) {
-            console.error("Error fetching doctor:", error);
-            setError("Unable to load doctor details.");
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleBookAppointment = () => {
         navigate(`/book/${doctor.id}`);
