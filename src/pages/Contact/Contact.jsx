@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useToast } from "../../context/ToastContext";
+// import { useToast } from "../../context/ToastContext";
 import "./Contact.css";
 
 function Contact() {
-  const { showToast } = useToast();
+  // const { showToast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -31,13 +31,13 @@ function Contact() {
       !formData.subject ||
       !formData.message
     ) {
-      showToast("Please fill all required fields.", "warning");
+      // showToast("Please fill all required fields.", "warning");
       return;
     }
 
     console.log("Contact Form:", formData);
 
-    showToast("Your message has been sent successfully! 💙", "success");
+    // showToast("Your message has been sent successfully! 💙", "success");
 
     setFormData({
       name: "",

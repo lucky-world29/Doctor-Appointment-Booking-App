@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../services/supabaseClient";
-import { useToast } from "../../context/ToastContext";
+// import { useToast } from "../../context/ToastContext";
 import "./Profile.css";
 
 function Profile() {
   const [user, setUser] = useState(null);
-  const { showToast } = useToast();
+  // const { showToast } = useToast();
   const [profile, setProfile] = useState(null);
 
   const [loading, setLoading] = useState(true);
@@ -64,7 +64,7 @@ function Profile() {
       }
 
       if (!user) {
-    showToast("User is not logged in.", "warning");
+    // showToast("User is not logged in.", "warning");
     return;
 }
 
@@ -100,7 +100,7 @@ function Profile() {
     } catch (error) {
       console.error("Profile error:", error);
 
-      showToast(error.message || "Unable to load your profile.", "error");
+      // showToast(error.message || "Unable to load your profile.", "error");
     } finally {
       setLoading(false);
     }
@@ -134,14 +134,14 @@ function Profile() {
     const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
 
     if (!allowedTypes.includes(file.type)) {
-      showToast("Please select a JPG, PNG, or WebP image.", "warning");
+      // showToast("Please select a JPG, PNG, or WebP image.", "warning");
 
       return;
     }
 
     // Maximum 5 MB
     if (file.size > 5 * 1024 * 1024) {
-      showToast("Profile image must be smaller than 5 MB.", "warning");
+      // showToast("Profile image must be smaller than 5 MB.", "warning");
 
       return;
     }
@@ -237,7 +237,7 @@ function Profile() {
 
       setEditing(false);
 
-      showToast("Profile updated successfully.", "success");
+      // showToast("Profile updated successfully.", "success");
 
       // Remove success message after 3 seconds
       // setTimeout(() => {
@@ -246,7 +246,7 @@ function Profile() {
     } catch (error) {
       console.error("Profile update error:", error);
 
-      showToast(error.message || "Unable to update your profile.", "error");
+      // showToast(error.message || "Unable to update your profile.", "error");
     } finally {
       setSaving(false);
     }

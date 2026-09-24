@@ -2,12 +2,12 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { supabase } from "../../services/supabaseClient";
-import { useToast } from "../../context/ToastContext";
+// import { useToast } from "../../context/ToastContext";
 import "./Register.css";
 
 function Register() {
   const navigate = useNavigate();
-  const { showToast } = useToast();
+  // const { showToast } = useToast();
   // ================================
   // STATE
   // ================================
@@ -41,19 +41,19 @@ function Register() {
 
     // Basic validation
     if (!fullName || !email || !phone || !password || !confirmPassword) {
-      showToast("Please fill all the required fields.", "warning");
+      // showToast("Please fill all the required fields.", "warning");
       return;
     }
 
     // Password match
     if (password !== confirmPassword) {
-      showToast("Passwords do not match.", "warning");
+      // showToast("Passwords do not match.", "warning");
       return;
     }
 
     // Password length
     if (password.length < 6) {
-      showToast("Password must be at least 6 characters.", "warning");
+      // showToast("Password must be at least 6 characters.", "warning");
       return;
     }
 
@@ -85,20 +85,20 @@ function Register() {
       // SUCCESS
       // ================================
 
-      showToast(
-        "Account created successfully! Please check your email to confirm your account.",
-        "success",
-      );
+      // showToast(
+      //   "Account created successfully! Please check your email to confirm your account.",
+      //   "success",
+      // );
 
       // Go to login page
       navigate("/login");
     } catch (error) {
       console.error("Registration error:", error);
 
-      showToast(
-        error.message || "Registration failed. Please try again.",
-        "error",
-      );
+      // showToast(
+      //   error.message || "Registration failed. Please try again.",
+      //   "error",
+      // );
     } finally {
       setLoading(false);
     }

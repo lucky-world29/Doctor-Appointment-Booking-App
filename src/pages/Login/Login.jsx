@@ -3,12 +3,12 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { supabase } from "../../services/supabaseClient";
-import { useToast } from "../../context/ToastContext";
+// import { useToast } from "../../context/ToastContext";
 import "./Login.css";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
-  const { showToast } = useToast();
+  // const { showToast } = useToast();
   const [email, setEmail] = useState("");
 
   const [password, setPassword] = useState("");
@@ -38,10 +38,10 @@ function Login() {
 
     // Basic validation
     if (!email || !password) {
-      showToast(
-    "Please enter your email and password.",
-    "warning"
-);
+//       showToast(
+//     "Please enter your email and password.",
+//     "warning"
+// );
       return;
     }
 
@@ -119,7 +119,7 @@ function Login() {
       // LOGIN SUCCESS
       // =========================================
 
-      showToast("Login successful! 🎉", "success");
+      // showToast("Login successful! 🎉", "success");
 
       // Redirect user
       navigate(from, {
@@ -130,19 +130,19 @@ function Login() {
 
       // Handle common Supabase errors
       if (error.message?.toLowerCase().includes("email not confirmed")) {
-        showToast(
-    "Please confirm your email address before logging in.",
-    "warning"
-);
+//         showToast(
+//     "Please confirm your email address before logging in.",
+//     "warning"
+// );
       } else if (
         error.message?.toLowerCase().includes("invalid login credentials")
       ) {
-       showToast(
-    "Invalid email or password.",
-    "error"
-);
+//        showToast(
+//     "Invalid email or password.",
+//     "error"
+// );
       } else {
-        showToast(error.message || "Login failed. Please try again.", "error");
+        // showToast(error.message || "Login failed. Please try again.", "error");
       }
     } finally {
       setLoading(false);
