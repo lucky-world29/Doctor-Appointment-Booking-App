@@ -12,6 +12,7 @@ function Navbar() {
   const [navHidden, setNavHidden] = useState(false);
 
   const [session, setSession] = useState(null);
+ const [profile, setProfile] = useState(null);
 
   const location = useLocation();
 
@@ -31,32 +32,79 @@ function Navbar() {
 
   useEffect(() => {
     const getSession = async () => {
-      const { data, error } = await supabase.auth.getSession();
+        const {
+            data,
+            error,
+        } = await supabase.auth.getSession();
 
-      if (error) {
-        console.error("Error getting session:", error);
-        return;
-      }
+        if (error) {
+            console.error(
+                "Error getting session:",
+                error
+            );
+            return;
+        }
 
-      setSession(data.session);
+        setSession(data.session);
+
+        // Fetch profile image
+        if (data.session?.user) {
+            const { data: profileData, error: profileError } =
+                await supabase
+                    .from("profiles")
+                    .select("avatar_url, full_name")
+                    .eq("id", data.session.user.id)
+                    .single();
+
+            if (profileError) {
+                console.error(
+                    "Error getting profile:",
+                    profileError
+                );
+            } else {
+                setProfile(profileData);
+            }
+        }
     };
 
     getSession();
 
-    // =========================================
-    // LISTEN FOR LOGIN / LOGOUT
-    // =========================================
+    const {
+        data: authListener,
+    } = supabase.auth.onAuthStateChange(
+        async (_event, newSession) => {
 
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (_event, newSession) => {
-        setSession(newSession);
-      },
+            setSession(newSession);
+
+            if (newSession?.user) {
+                const {
+                    data: profileData,
+                    error: profileError,
+                } = await supabase
+                    .from("profiles")
+                    .select("avatar_url, full_name")
+                    .eq("id", newSession.user.id)
+                    .single();
+
+                if (profileError) {
+                    console.error(
+                        "Error getting profile:",
+                        profileError
+                    );
+                    setProfile(null);
+                } else {
+                    setProfile(profileData);
+                }
+            } else {
+                setProfile(null);
+            }
+        }
     );
 
     return () => {
-      authListener?.subscription?.unsubscribe();
+        authListener?.subscription?.unsubscribe();
     };
-  }, []);
+}, []);
 
   // =========================================
   // LOGOUT
@@ -183,26 +231,25 @@ function Navbar() {
         {session ? (
           <div className="floating-user">
             <Link
-              to="/profile"
-              className="floating-user-profile"
-              onClick={closeMenu}
-            >
-              {/* <span className="floating-user-icon">
-                                👤
-                            </span> */}
-              <span className="floating-user-icon">
-                {session?.user?.user_metadata?.avatar_url ? (
-                  <img
-                    src={session.user.user_metadata.avatar_url}
-                    alt={userName}
-                  />
-                ) : (
-                  "👤"
-                )}
-              </span>
+    to="/profile"
+    className="floating-user-profile"
+    onClick={closeMenu}
+>
+    <span className="floating-user-icon">
+        {profile?.avatar_url ? (
+            <img
+                src={profile.avatar_url}
+                alt={userName}
+            />
+        ) : (
+            "👤"
+        )}
+    </span>
 
-              <span className="floating-user-name">{userName}</span>
-            </Link>
+    <span className="floating-user-name">
+        {userName}
+    </span>
+</Link>
 
             <button
               type="button"

@@ -1,9 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+import { useToast } from "../../context/ToastContext";
 import "./Home.css";
 
 function Home() {
+   const { showToast } = useToast();
   return (
     <div className="doctor-home">
 

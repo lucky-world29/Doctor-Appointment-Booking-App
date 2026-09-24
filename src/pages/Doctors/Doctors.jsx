@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 
 import DoctorCard from "../../components/DoctorCard/DoctorCard";
+import { useToast } from "../../context/ToastContext";
 import { supabase } from "../../services/supabaseClient";
 
 function Doctors() {
     // ================================
     // STATE
     // ================================
-
+    const { showToast } = useToast();
     const [doctors, setDoctors] = useState([]);
 
     const [search, setSearch] = useState("");
@@ -43,9 +44,10 @@ function Doctors() {
                 error
             );
 
-            setError(
-                "Unable to load doctors. Please try again."
-            );
+            showToast(
+    "Unable to load doctors. Please try again.",
+    "error"
+);
 
             setDoctors([]);
         } else {
