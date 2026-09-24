@@ -1,11 +1,11 @@
 import { useParams, Link } from "react-router-dom";
 import { useState } from "react";
-// import { useToast } from "../../context/ToastContext";
+import toast from "react-hot-toast";
 import "./BookAppointment.css";
 
 function BookAppointment() {
   const { id } = useParams();
-// const { showToast } = useToast();
+
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [patientName, setPatientName] = useState("");
@@ -27,11 +27,11 @@ function BookAppointment() {
     e.preventDefault();
 
     if (!patientName || !selectedDate || !selectedTime) {
-      // showToast("Please fill all required details.", "warning");
+        toast.error("Please fill all required details.");
       return;
     }
 
-    // showToast("Appointment booked successfully!", "success");
+    toast.success("Appointment booked successfully!");
   };
 
   return (

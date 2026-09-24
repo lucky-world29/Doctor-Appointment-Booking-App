@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 
 import DoctorCard from "../../components/DoctorCard/DoctorCard";
-// import { useToast } from "../../context/ToastContext";
+import toast from "react-hot-toast";
 import { supabase } from "../../services/supabaseClient";
 
 function Doctors() {
     // ================================
     // STATE
     // ================================
-    // const { showToast } = useToast();
+
     const [doctors, setDoctors] = useState([]);
 
     const [search, setSearch] = useState("");
@@ -43,11 +43,7 @@ function Doctors() {
                 "Error fetching doctors:",
                 error
             );
-
-//             showToast(
-//     "Unable to load doctors. Please try again.",
-//     "error"
-// );
+            toast.error("Error fetching doctors. Please try again later.");
 
             setDoctors([]);
         } else {

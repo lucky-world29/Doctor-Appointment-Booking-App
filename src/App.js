@@ -42,7 +42,7 @@ import Error500 from "./common/Error500";
 //=========================================
 
 
-import { ToastProvider } from "./context/ToastContext";
+import { Toaster } from "react-hot-toast";
 
 // =========================================
 // APP CONTENT
@@ -157,9 +157,12 @@ function AppContent() {
 function App() {
   return (
     <BrowserRouter>
-      <ToastProvider>
-        <AppContent />
-      </ToastProvider>
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+      />
+
+      <AppContent />
     </BrowserRouter>
   );
 }

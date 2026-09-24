@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../services/supabaseClient";
-// import { useToast } from "../../context/ToastContext";
+import toast from "react-hot-toast";
 import "./Profile.css";
 
 function Profile() {
   const [user, setUser] = useState(null);
-  // const { showToast } = useToast();
   const [profile, setProfile] = useState(null);
 
   const [loading, setLoading] = useState(true);
@@ -64,7 +63,7 @@ function Profile() {
       }
 
       if (!user) {
-    // showToast("User is not logged in.", "warning");
+        toast.error("User is not logged in.");
     return;
 }
 
@@ -100,7 +99,7 @@ function Profile() {
     } catch (error) {
       console.error("Profile error:", error);
 
-      // showToast(error.message || "Unable to load your profile.", "error");
+      toast.error(error.message || "Unable to load your profile.");
     } finally {
       setLoading(false);
     }
@@ -134,15 +133,13 @@ function Profile() {
     const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
 
     if (!allowedTypes.includes(file.type)) {
-      // showToast("Please select a JPG, PNG, or WebP image.", "warning");
-
+      toast.error("Please select a JPG, PNG, or WebP image.");
       return;
     }
 
     // Maximum 5 MB
     if (file.size > 5 * 1024 * 1024) {
-      // showToast("Profile image must be smaller than 5 MB.", "warning");
-
+      toast.error("Profile image must be smaller than 5 MB.");
       return;
     }
 
@@ -237,16 +234,12 @@ function Profile() {
 
       setEditing(false);
 
-      // showToast("Profile updated successfully.", "success");
+      toast.success("Profile updated successfully.");
 
-      // Remove success message after 3 seconds
-      // setTimeout(() => {
-      //   setMessage("");
-      // }, 3000);
+
     } catch (error) {
       console.error("Profile update error:", error);
-
-      // showToast(error.message || "Unable to update your profile.", "error");
+      toast.error(error.message || "Unable to update your profile.");
     } finally {
       setSaving(false);
     }
